@@ -16,8 +16,25 @@ module.exports = {
     res.send('Get an existing workout');
   },
   createNewWorkout: async (req, res) => {
-    const allWorkouts = workoutService.getAllWorkouts();
-    res.send('Create a new workout');
+    const { body } = req;
+
+    if (
+      !body.name ||
+      !body.mode ||
+      !body.equipment ||
+      !body.exercises ||
+      !body.trainerTips
+    )
+      return;
+    const newWorkout = {
+      name: body.name,
+      mode: body.mode,
+      equipment: body.equipment,
+      exercises: body.exercises,
+      trainerTips: body.trainerTips,
+    };
+    const createdWorkout = workoutService.createOneWorkout(newWorkout);
+    res.status(201).send({ status: 'ok', data: createdWorkout });
   },
   updateOneWorkout: async (req, res) => {
     const allWorkouts = workoutService.getAllWorkouts();
